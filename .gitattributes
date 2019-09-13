@@ -1,2 +1,2 @@
-# Tell GitHub to report all SQL files as PL/SQ:
+# Tell GitHub to report all SQL files as PL/SQL:
 *.sql linguist-language=PLSQL
