@@ -3,8 +3,8 @@ Rem $Header: qs_drop.sql 2015/03/19 10:23:26 smtaylor Exp $
 Rem
 Rem qs_drop.sql
 Rem
-Rem Copyright (c) 2001, 2015, Oracle Corporation.  All rights reserved.  
-Rem 
+Rem Copyright (c) 2001, 2015, Oracle Corporation.  All rights reserved.
+Rem
 Rem Permission is hereby granted, free of charge, to any person obtaining
 Rem a copy of this software and associated documentation files (the
 Rem "Software"), to deal in the Software without restriction, including
@@ -12,10 +12,10 @@ Rem without limitation the rights to use, copy, modify, merge, publish,
 Rem distribute, sublicense, and/or sell copies of the Software, and to
 Rem permit persons to whom the Software is furnished to do so, subject to
 Rem the following conditions:
-Rem 
+Rem
 Rem The above copyright notice and this permission notice shall be
 Rem included in all copies or substantial portions of the Software.
-Rem 
+Rem
 Rem THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 Rem EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 Rem MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -267,7 +267,7 @@ end;
 
 CONNECT QS_ADM/&password_QS_ADM@&connect_string
 
-Rem drop objects types 
+Rem drop objects types
 
 drop type order_typ;
 drop type orderitemlist_vartyp;
@@ -277,7 +277,7 @@ drop type customer_typ;
 
 Rem drop queue admin account and individual accounts for each application
 Rem
-CONNECT system/&password_SYSTEM@&connect_string
+CONNECT admin/&password_admin@&connect_string
 set serveroutput on;
 set echo on;
 

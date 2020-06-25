@@ -3,8 +3,8 @@ Rem $Header: rdbms/demo/schema/mkunplug.sql /main/18 2012/08/08 17:51:26 celsber
 Rem
 Rem mkunplug.sql
 Rem
-Rem Copyright (c) 2001, 2015, Oracle and/or its affiliates.  All rights reserved. 
-Rem 
+Rem Copyright (c) 2001, 2015, Oracle and/or its affiliates.  All rights reserved.
+Rem
 Rem Permission is hereby granted, free of charge, to any person obtaining
 Rem a copy of this software and associated documentation files (the
 Rem "Software"), to deal in the Software without restriction, including
@@ -12,10 +12,10 @@ Rem without limitation the rights to use, copy, modify, merge, publish,
 Rem distribute, sublicense, and/or sell copies of the Software, and to
 Rem permit persons to whom the Software is furnished to do so, subject to
 Rem the following conditions:
-Rem 
+Rem
 Rem The above copyright notice and this permission notice shall be
 Rem included in all copies or substantial portions of the Software.
-Rem 
+Rem
 Rem THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 Rem EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 Rem MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -50,7 +50,7 @@ Rem      celsbern  07/07/10 - removing call to mk_expdp_do.sql script
 Rem      celsbern  06/28/10 - fixing path for backup dfb file
 Rem      celsbern  06/22/10 - removing mention of paths in prompts
 Rem      celsbern  05/31/10 - converted to dpexp
-Rem      cbauwens  05/02/05 - bug4054905 Date & Time format 
+Rem      cbauwens  05/02/05 - bug4054905 Date & Time format
 Rem      cbauwens  08/01/03 - rman compress
 Rem      cbauwens  07/31/03 - rman compress
 Rem      cbauwens  07/24/03 - rman compress
@@ -60,7 +60,7 @@ Rem      ahunold   02/27/03 - bug 2824141 (workaround)
 Rem      ahunold   03/01/03 - Bug 2828348
 Rem      ahunold   01/27/03 - RMAN backup finalized
 Rem      ahunold   01/14/03 - Invalid View workaround, comments
-Rem      ahunold   09/25/02 - exp logfile 
+Rem      ahunold   09/25/02 - exp logfile
 Rem      ahunold   09/18/02 - Created
 Rem
 
@@ -74,27 +74,27 @@ SET ECHO OFF
 SET CONCAT '.'
 SET SHOWMODE OFF
 
-PROMPT 
+PROMPT
 PROMPT specify password for SYS as parameter 1:
 DEFINE password_sys        = &1
-PROMPT 
+PROMPT
 PROMPT specify OUTPUT export file name, excluding path, as parameter 2:
 DEFINE exp_file            = &2
 PROMPT
 PROMPT specify OUTPUT tablespace backup file name, excluding path, as parameter 3:
 DEFINE backup_file         = &3
-PROMPT 
+PROMPT
 PROMPT specify LOG directory, open for write, as parameter 4:
 DEFINE log_path            = &4
-PROMPT 
+PROMPT
 PROMPT specify DUMP directory as parameter 5:
 DEFINE dump_path            = &5
-PROMPT 
+PROMPT
 DEFINE vrs = v3
 
-SPOOL &log_path.mkunplug_&vrs._@.log 
+SPOOL &log_path.mkunplug_&vrs._@.log
 
-CONNECT sys/&&password_sys AS SYSDBA;
+CONNECT admin/&&password_sys;
 
 --
 -- Check for violations of TTS prerequisites
@@ -117,7 +117,7 @@ grant read,write on directory SS_LOGPATH_DIR to public;
 ALTER TABLESPACE example READ ONLY;
 
 -- export the meta data for the tablespace
-host expdp "'sys/&&password_sys AS SYSDBA'" dumpfile=&exp_file logfile=SS_LOGPATH_DIR:tts_example_exp.log transport_tablespaces=EXAMPLE directory=SS_IMPEXP_DIR silent=banner
+host expdp "'admin/&&password_sys'" dumpfile=&exp_file logfile=SS_LOGPATH_DIR:tts_example_exp.log transport_tablespaces=EXAMPLE directory=SS_IMPEXP_DIR silent=banner
 
 SET PAGESIZE 0
 
@@ -149,8 +149,8 @@ declare
     recid number;
     stamp number;
     tag varchar2(32);
-    
-    
+
+
 begin
     dbms_output.put_line(' ');
     dbms_output.put_line(' BACKUP: Allocating device... ');
@@ -179,7 +179,7 @@ PROMPT
 PROMPT Ready to transport export file &exp_file
 PROMPT Ready to transport tablespace backup file &backup_file
 PROMPT
-PROMPT Please copy both, the tablespace backup and export file, to the target database location 
+PROMPT Please copy both, the tablespace backup and export file, to the target database location
 
 EXIT
 

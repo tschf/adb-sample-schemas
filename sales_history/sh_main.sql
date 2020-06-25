@@ -3,8 +3,8 @@ Rem $Header: rdbms/demo/schema/sales_history/sh_main.sql /main/12 2015/03/19 10:
 Rem
 Rem sh_main.sql
 Rem
-Rem Copyright (c) 2001, 2015, Oracle and/or its affiliates.  All rights reserved. 
-Rem 
+Rem Copyright (c) 2001, 2015, Oracle and/or its affiliates.  All rights reserved.
+Rem
 Rem Permission is hereby granted, free of charge, to any person obtaining
 Rem a copy of this software and associated documentation files (the
 Rem "Software"), to deal in the Software without restriction, including
@@ -12,10 +12,10 @@ Rem without limitation the rights to use, copy, modify, merge, publish,
 Rem distribute, sublicense, and/or sell copies of the Software, and to
 Rem permit persons to whom the Software is furnished to do so, subject to
 Rem the following conditions:
-Rem 
+Rem
 Rem The above copyright notice and this permission notice shall be
 Rem included in all copies or substantial portions of the Software.
-Rem 
+Rem
 Rem THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 Rem EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 Rem MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -25,7 +25,7 @@ Rem OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 Rem WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 Rem
 Rem    NAME
-Rem      sh_main.sql - Main schema creation and load script 
+Rem      sh_main.sql - Main schema creation and load script
 Rem
 Rem    DESCRIPTION
 Rem      SH is the Sales History schema of the Oracle Sample
@@ -33,10 +33,10 @@ Rem	   Schemas
 Rem
 Rem    NOTES
 Rem     CAUTION: use absolute pathnames as parameters 5 and 6.
-Rem     Example (UNIX) echo $ORACLE_HOME/demo/schema/sales_history      
+Rem     Example (UNIX) echo $ORACLE_HOME/demo/schema/sales_history
 Rem     Please make sure that parameters 5 and 6 are specified
 Rem     INCLUDING the trailing directory delimiter, since the
-Rem     directory parameters and the filenames are concatenated 
+Rem     directory parameters and the filenames are concatenated
 Rem     without adding any delimiters.
 Rem     Run this as SYS or SYSTEM
 Rem
@@ -49,8 +49,8 @@ Rem     jmadduku   02/18/11 - Grant Unlimited Tablespace priv with RESOURCE
 Rem     cbauwens   03/06/08 - NLS settings for load
 Rem     cbauwens   07/10/07 - NLS fix bug 5684394
 Rem     glyon      06/28/07 - grant CWM_USER role, if it exists
-Rem     cbauwens   02/23/05 - depricating connect role 
-Rem     ahunold    10/14/02 - 
+Rem     cbauwens   02/23/05 - depricating connect role
+Rem     ahunold    10/14/02 -
 Rem     hyeh       08/29/02 - hyeh_mv_comschema_to_rdbms
 Rem     ahunold    08/20/02 - path > dir
 Rem     ahunold    08/15/02 - versioning
@@ -70,18 +70,18 @@ Rem
 
 SET ECHO OFF
 
-PROMPT 
+PROMPT
 PROMPT specify password for SH as parameter 1:
 DEFINE pass     = &1
-PROMPT 
+PROMPT
 PROMPT specify default tablespace for SH as parameter 2:
 DEFINE tbs      = &2
-PROMPT 
+PROMPT
 PROMPT specify temporary tablespace for SH as parameter 3:
 DEFINE ttbs     = &3
-PROMPT 
+PROMPT
 PROMPT specify password for SYS as parameter 4:
-DEFINE pass_sys = &4
+DEFINE pass_admin = &4
 PROMPT
 PROMPT specify directory path for the data files as parameter 5:
 DEFINE data_dir = &5
@@ -97,7 +97,7 @@ DEFINE connect_string     = &8
 PROMPT
 
 DEFINE spool_file = &log_dir.sh_&vrs..log
-SPOOL &spool_file 
+SPOOL &spool_file
 
 ALTER SESSION SET NLS_LANGUAGE='American';
 
@@ -131,6 +131,7 @@ GRANT CREATE SEQUENCE          TO sh;
 GRANT CREATE CLUSTER           TO sh;
 GRANT CREATE DATABASE LINK     TO sh;
 GRANT ALTER SESSION            TO sh;
+GRANT CREATE ANY DIRECTORY to sh;
 
 
 GRANT RESOURCE , UNLIMITED TABLESPACE              TO sh;
@@ -142,22 +143,24 @@ REM =======================================================
 REM grants for sys schema
 REM =======================================================
 
-CONNECT sys/&pass_sys@&connect_string AS SYSDBA;
+CONNECT admin/&pass_admin@&connect_string;
 GRANT execute ON sys.dbms_stats TO sh;
 
 REM =======================================================
 REM DIRECTORY objects are always owned by SYS
-REM    for security reasons, SH does not have 
+REM    for security reasons, SH does not have
 REM    CREATE ANY DIRECTORY system privilege
 REM =======================================================
 
-CREATE OR REPLACE DIRECTORY data_file_dir AS '&data_dir';
-CREATE OR REPLACE DIRECTORY log_file_dir AS '&log_dir';
+CREATE OR REPLACE DIRECTORY sales as 'sh';
+CREATE OR REPLACE DIRECTORY data_file_dir AS 'sh/data';
+CREATE OR REPLACE DIRECTORY log_file_dir AS 'sh/logs';
 
+GRANT READ ON DIRECTORY sales TO sh;
 GRANT READ ON DIRECTORY data_file_dir TO sh;
 GRANT READ ON DIRECTORY log_file_dir  TO sh;
 GRANT WRITE ON DIRECTORY log_file_dir TO sh;
- 
+
 REM =======================================================
 REM create sh schema objects (sales history - star schema)
 REM =======================================================
@@ -180,14 +183,14 @@ REM =======================================================
 REM Populate tables
 REM =======================================================
 
-DEFINE vscript = __SUB__CWD__/sales_history/lsh_&vrs 
+DEFINE vscript = __SUB__CWD__/sales_history/lsh_&vrs
 @&vscript &pass &data_dir &log_dir &vrs &connect_string
 
 REM =======================================================
 REM Post load operations
 REM =======================================================
 
-DEFINE vscript = __SUB__CWD__/sales_history/psh_&vrs 
+DEFINE vscript = __SUB__CWD__/sales_history/psh_&vrs
 @&vscript
 
 
