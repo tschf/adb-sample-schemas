@@ -37,7 +37,8 @@ has been ommitted.
 failing as I was testing, so have intentionally been excluded from the release.
 4. business intelligence (bi) attempts to grant select on a bunch of OE objects,
 however these didn't seem to be available. My assumption is that these were part
-of the XML part of the schema.
+of the XML part of the schema. Additionally some SH tables, but we connect connect
+to that table directly. So this has also been ommitted.
 Also, in the verification phase it tries to query some MVs which belongs to SH
 schema. Since we didn't rebuilt this schema it's not possible to perform that operation.
 
