@@ -42,6 +42,8 @@ to that table directly. So this has also been ommitted.
 Also, in the verification phase it tries to query some MVs which belongs to SH
 schema. Since we didn't rebuilt this schema it's not possible to perform that operation.
 
+Right now, the main schemas containing data things are hr and oe.
+
 ## Installing the sample schema - steps
 
 Requirements: sqlplus + sqlldr
@@ -73,8 +75,7 @@ Params are:
 3. OE password
 4. PM password
 5. IX password
-6. BI password 
-7. Data tablespace
-8. TEmp tablespace
-9. Log folder for installation process
-10. Connect string (TNS Name entry)
+6. Data tablespace
+7. Temp tablespace
+8. Log folder for installation process
+9. Connect string (TNS Name entry)
