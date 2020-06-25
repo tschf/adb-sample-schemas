@@ -117,21 +117,22 @@ DEFINE password_ix         = &5
 -- PROMPT
 -- PROMPT specify password for  SH as parameter 6:
 -- DEFINE password_sh         = &6
+-- trent: BI is just some views on top of SH, skip for now.
+-- PROMPT
+-- PROMPT specify password for  BI as parameter 7:
+-- DEFINE password_bi         = &6
 PROMPT
-PROMPT specify password for  BI as parameter 7:
-DEFINE password_bi         = &6
+PROMPT specify default tablespace as parameter 6:
+DEFINE default_ts          = &6
 PROMPT
-PROMPT specify default tablespace as parameter 8:
-DEFINE default_ts          = &7
+PROMPT specify temporary tablespace as parameter 7:
+DEFINE temp_ts             = &7
 PROMPT
-PROMPT specify temporary tablespace as parameter 9:
-DEFINE temp_ts             = &8
+PROMPT specify log file directory (including trailing delimiter) as parameter 8:
+DEFINE logfile_dir         = &8
 PROMPT
-PROMPT specify log file directory (including trailing delimiter) as parameter 9:
-DEFINE logfile_dir         = &9
-PROMPT
-PROMPT specify connect string as parameter 11:
-DEFINE connect_string     = &10
+PROMPT specify connect string as parameter 9:
+DEFINE connect_string     = &9
 PROMPT
 PROMPT Sample Schemas are being created ...
 PROMPT
@@ -166,16 +167,20 @@ SET SHOWMODE OFF
 
 -- @__SUB__CWD__/sales_history/sh_main &&password_sh &&default_ts &&temp_ts &&password_admin __SUB__CWD__/sales_history/ &&logfile_dir &vrs &&connect_string
 
-CONNECT admin/"&&password_admin"@&&connect_string
-SET SHOWMODE OFF
+-- trent: The BI schema is basically some views on top of SH and OE, so we can skip for
+-- the moment
+-- CONNECT admin/"&&password_admin"@&&connect_string
+-- SET SHOWMODE OFF
 
-@__SUB__CWD__/bus_intelligence/bi_main &&password_bi &&default_ts &&temp_ts &&password_admin &&password_oe &&password_sh &&logfile_dir &vrs &&connect_string
+-- @__SUB__CWD__/bus_intelligence/bi_main &&password_bi &&default_ts &&temp_ts &&password_admin &&password_oe &&password_sh &&logfile_dir &vrs &&connect_string
 
 CONNECT admin/"&&password_admin"@&&connect_string
 
 SPOOL OFF
 
-DEFINE veri_spool = &&logfile_dir.mkverify_&vrs..log
+-- trent: THe verification will undoubtedly fail with the objects we skipped,
+-- so excluding this for now.
+-- DEFINE veri_spool = &&logfile_dir.mkverify_&vrs..log
 
-@__SUB__CWD__/mkverify &&password_admin &veri_spool &&connect_string
+-- @__SUB__CWD__/mkverify &&password_admin &veri_spool &&connect_string
 

@@ -126,9 +126,7 @@ REM  Changes made as OE
 REM     Grant object privileges to BI
 REM =======================================================
 
--- trent: The tables in this script didn't seem aailable within OE. It could
--- be because of the missing XMLDB steps.
--- @__SUB__CWD__/bus_intelligence/bi_oe_pr.sql &pwd_oe &connect_string
+@__SUB__CWD__/bus_intelligence/bi_oe_pr.sql &pwd_oe &connect_string
 
 REM =======================================================
 REM  Changes made as SH
@@ -159,11 +157,8 @@ SELECT COUNT(*) FROM promotions;
 SELECT COUNT(*) FROM sales;
 SELECT COUNT(*) FROM costs;
 
--- trent: We didn't do the SH scripts in this stage because it already existed,
--- and these MV's do not exist. Possible if we create SH under a different name
--- we could re-enable these.
--- SELECT COUNT(*) FROM sh.cal_month_sales_mv;
--- SELECT COUNT(*) FROM sh.fweek_pscat_sales_mv;
+SELECT COUNT(*) FROM sh.cal_month_sales_mv;
+SELECT COUNT(*) FROM sh.fweek_pscat_sales_mv;
 
 SELECT COUNT(*) FROM channels;
 SELECT COUNT(*) FROM countries;
