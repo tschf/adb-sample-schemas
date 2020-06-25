@@ -113,24 +113,25 @@ DEFINE password_pm         = &4
 PROMPT
 PROMPT specify password for IX as parameter 5:
 DEFINE password_ix         = &5
-PROMPT
-PROMPT specify password for  SH as parameter 6:
-DEFINE password_sh         = &6
+-- trent: We're not using SH in this initial version, so remove as an input parm.
+-- PROMPT
+-- PROMPT specify password for  SH as parameter 6:
+-- DEFINE password_sh         = &6
 PROMPT
 PROMPT specify password for  BI as parameter 7:
-DEFINE password_bi         = &7
+DEFINE password_bi         = &6
 PROMPT
 PROMPT specify default tablespace as parameter 8:
-DEFINE default_ts          = &8
+DEFINE default_ts          = &7
 PROMPT
 PROMPT specify temporary tablespace as parameter 9:
-DEFINE temp_ts             = &9
+DEFINE temp_ts             = &8
 PROMPT
-PROMPT specify log file directory (including trailing delimiter) as parameter 10:
-DEFINE logfile_dir         = &10
+PROMPT specify log file directory (including trailing delimiter) as parameter 9:
+DEFINE logfile_dir         = &9
 PROMPT
 PROMPT specify connect string as parameter 11:
-DEFINE connect_string     = &11
+DEFINE connect_string     = &10
 PROMPT
 PROMPT Sample Schemas are being created ...
 PROMPT
@@ -138,46 +139,37 @@ DEFINE vrs = v3
 
 host mkdir &&logfile_dir
 
-CONNECT admin/"&&password_admin"@&&connect_string
+SET SHOWMODE OFF
 
-DROP USER hr CASCADE;
-DROP USER oe CASCADE;
-DROP USER pm CASCADE;
-DROP USER ix CASCADE;
-DROP USER sh CASCADE;
-DROP USER bi CASCADE;
+@__SUB__CWD__/human_resources/hr_main.sql &&password_hr &&default_ts &&temp_ts &&password_admin &&logfile_dir &&connect_string
+
+CONNECT admin/"&&password_admin"@&&connect_string
+SET SHOWMODE OFF
+
+@__SUB__CWD__/order_entry/oe_main.sql &&password_oe &&default_ts &&temp_ts &&password_hr &&password_admin __SUB__CWD__/order_entry/ &&logfile_dir &vrs &&connect_string
 
 CONNECT admin/"&&password_admin"@&&connect_string
 
 SET SHOWMODE OFF
 
-@__SUB__CWD__/human_resources/hr_main.sql &&password_hr &&default_ts &&temp_ts &&password_sys &&logfile_dir &&connect_string
+@__SUB__CWD__/product_media/pm_main.sql &&password_pm &&default_ts &&temp_ts &&password_oe &&password_admin __SUB__CWD__/product_media/ &&logfile_dir __SUB__CWD__/product_media/ &&connect_string
 
 CONNECT admin/"&&password_admin"@&&connect_string
 SET SHOWMODE OFF
 
-@__SUB__CWD__/order_entry/oe_main.sql &&password_oe &&default_ts &&temp_ts &&password_hr &&password_sys __SUB__CWD__/order_entry/ &&logfile_dir &vrs &&connect_string
+@__SUB__CWD__/info_exchange/ix_main.sql &&password_ix &&default_ts &&temp_ts &&password_admin &&logfile_dir &vrs &&connect_string
 
-CONNECT admin/"&&password_admin"@&&connect_string
+-- trent: In ATP, SH schema already exists in a read only form. So we can not continue
+-- with this. TODO - Update scripts to reference a new schema name.
+-- CONNECT admin/"&&password_admin"@&&connect_string
+-- SET SHOWMODE OFF
 
-SET SHOWMODE OFF
-
-@__SUB__CWD__/product_media/pm_main.sql &&password_pm &&default_ts &&temp_ts &&password_oe &&password_sys __SUB__CWD__/product_media/ &&logfile_dir __SUB__CWD__/product_media/ &&connect_string
-
-CONNECT admin/"&&password_admin"@&&connect_string
-SET SHOWMODE OFF
-
-@__SUB__CWD__/info_exchange/ix_main.sql &&password_ix &&default_ts &&temp_ts &&password_sys &&logfile_dir &vrs &&connect_string
+-- @__SUB__CWD__/sales_history/sh_main &&password_sh &&default_ts &&temp_ts &&password_admin __SUB__CWD__/sales_history/ &&logfile_dir &vrs &&connect_string
 
 CONNECT admin/"&&password_admin"@&&connect_string
 SET SHOWMODE OFF
 
-@__SUB__CWD__/sales_history/sh_main &&password_sh &&default_ts &&temp_ts &&password_sys __SUB__CWD__/sales_history/ &&logfile_dir &vrs &&connect_string
-
-CONNECT admin/"&&password_admin"@&&connect_string
-SET SHOWMODE OFF
-
-@__SUB__CWD__/bus_intelligence/bi_main &&password_bi &&default_ts &&temp_ts &&password_sys &&password_oe &&password_sh &&logfile_dir &vrs &&connect_string
+@__SUB__CWD__/bus_intelligence/bi_main &&password_bi &&default_ts &&temp_ts &&password_admin &&password_oe &&password_sh &&logfile_dir &vrs &&connect_string
 
 CONNECT admin/"&&password_admin"@&&connect_string
 

@@ -68,7 +68,7 @@ PROMPT specify password for OE as parameter 5:
 DEFINE passoe   = &5
 PROMPT
 PROMPT specify password for SYS as parameter 6:
-DEFINE pass_sys = &6
+DEFINE pass_admin = &6
 PROMPT
 PROMPT specify log directory path as parameter 7:
 DEFINE log_path = &7
@@ -129,7 +129,7 @@ REM  connected as sys to grant execute on dbms_lock
 REM  and connected again as system
 REM  ===================================================
 
-CONNECT sys/&pass_sys@&connect_string AS SYSDBA;
+CONNECT admin&pass_admin@&connect_string;
 GRANT execute ON sys.dbms_stats TO qs_adm;
 GRANT execute ON dbms_lock to qs_adm;
 

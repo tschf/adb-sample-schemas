@@ -3,8 +3,8 @@ Rem $Header: cix_v3.sql 29-aug-2002.11:44:16 hyeh Exp $
 Rem
 Rem cix_v3.sql
 Rem
-Rem Copyright (c) 2002, 2015, Oracle Corporation.  All rights reserved.  
-Rem 
+Rem Copyright (c) 2002, 2015, Oracle Corporation.  All rights reserved.
+Rem
 Rem Permission is hereby granted, free of charge, to any person obtaining
 Rem a copy of this software and associated documentation files (the
 Rem "Software"), to deal in the Software without restriction, including
@@ -12,10 +12,10 @@ Rem without limitation the rights to use, copy, modify, merge, publish,
 Rem distribute, sublicense, and/or sell copies of the Software, and to
 Rem permit persons to whom the Software is furnished to do so, subject to
 Rem the following conditions:
-Rem 
+Rem
 Rem The above copyright notice and this permission notice shall be
 Rem included in all copies or substantial portions of the Software.
-Rem 
+Rem
 Rem THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 Rem EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 Rem MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -52,7 +52,7 @@ CREATE OR REPLACE TYPE order_event_typ AS OBJECT (
 	order_status  	NUMBER(2),
 	delivery_date	DATE
 );
-/	
+/
 
 REM =======================================================
 REM Create queue tables, queues for IX
@@ -67,7 +67,7 @@ EXECUTE dbms_aqadm.create_queue_table(		 -
         secondary_instance => 2);
 
 REM =======================================================
-REM Create Orders Queue 
+REM Create Orders Queue
 REM =======================================================
 
 BEGIN
@@ -91,4 +91,5 @@ REM =======================================================
 REM Create TYPE ANY Queue for Streams
 REM =======================================================
 
-EXECUTE DBMS_STREAMS_ADM.SET_UP_QUEUE();
+-- trent: The queue stuff doesn't seem to work. Look into this in the future
+-- EXECUTE DBMS_STREAMS_ADM.SET_UP_QUEUE();
