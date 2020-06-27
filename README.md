@@ -1,4 +1,4 @@
-# Oracle Database Sample Schemas - For Automous
+# Oracle Database Sample Schemas - For Autonomous
 
 This is a variation on Oracle db-sample-schemas. It uses sys for its connections
 where ATP expects a connection against admin.
@@ -68,8 +68,9 @@ Params are:
 3. OE password
 4. PM password
 5. IX password
-6. SH password
-7. Data tablespace
-8. Temp tablespace
-9. Log folder for installation process
-10. Connect string (TNS Name entry)
+6. SALES_HIST password
+7. BI password
+8. Data tablespace
+9. Temp tablespace
+10. Log folder for installation process
+11. Connect string (TNS Name entry)
