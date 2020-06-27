@@ -4,7 +4,7 @@ Rem
 Rem vsh_v3.sql
 Rem
 Rem Copyright (c) 2002, 2015, Oracle and/or its affiliates.  All rights reserved.
-Rem 
+Rem
 Rem Permission is hereby granted, free of charge, to any person obtaining
 Rem a copy of this software and associated documentation files (the
 Rem "Software"), to deal in the Software without restriction, including
@@ -12,10 +12,10 @@ Rem without limitation the rights to use, copy, modify, merge, publish,
 Rem distribute, sublicense, and/or sell copies of the Software, and to
 Rem permit persons to whom the Software is furnished to do so, subject to
 Rem the following conditions:
-Rem 
+Rem
 Rem The above copyright notice and this permission notice shall be
 Rem included in all copies or substantial portions of the Software.
-Rem 
+Rem
 Rem THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 Rem EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 Rem MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -66,10 +66,10 @@ SET PAGESIZE 100
 SET VERIFY OFF
 SET CONCAT '.'
 
-PROMPT 
-PROMPT specify password for SH as parameter 1:
+PROMPT
+PROMPT specify password for SALES_HIST as parameter 1:
 DEFINE sh_pass     = &1
-PROMPT 
+PROMPT
 PROMPT specify path for data files as parameter 2:
 DEFINE data_path = &2
 PROMPT
@@ -91,7 +91,7 @@ PROMPT Looking for indexes that could slow down load ...
 
 SELECT index_name FROM user_indexes;
 
--- 
+--
 -- TIMES
 --
 
@@ -105,7 +105,7 @@ PROMPT   &ctl_file
 PROMPT   &dat_file
 PROMPT   &log_file
 
-HOST sqlldr sh/&sh_pass@&connect_string  -
+HOST sqlldr sales_hist/&sh_pass@&connect_string  -
  control=&ctl_file data=&dat_file log=&log_file -
  direct=yes -
  rows=1000
@@ -124,7 +124,7 @@ PROMPT   &ctl_file
 PROMPT   &dat_file
 PROMPT   &log_file
 
-HOST sqlldr sh/&sh_pass@&connect_string  -
+HOST sqlldr sales_hist/&sh_pass@&connect_string  -
  control=&ctl_file data=&dat_file log=&log_file -
  direct=yes -
  rows=1000
@@ -143,7 +143,7 @@ PROMPT   &ctl_file
 PROMPT   &dat_file
 PROMPT   &log_file
 
-HOST sqlldr sh/&sh_pass@&connect_string  -
+HOST sqlldr sales_hist/&sh_pass@&connect_string  -
  control=&ctl_file data=&dat_file log=&log_file -
  direct=yes -
  rows=10000
@@ -164,7 +164,7 @@ PROMPT   &ctl_file
 PROMPT   &dat_file
 PROMPT   &log_file
 
-HOST sqlldr sh/&sh_pass@&connect_string  -
+HOST sqlldr sales_hist/&sh_pass@&connect_string  -
  control=&ctl_file data=&dat_file log=&log_file -
  direct=yes -
  rows=10000
@@ -184,7 +184,7 @@ PROMPT   &ctl_file
 PROMPT   &dat_file
 PROMPT   &log_file
 
-HOST sqlldr sh/&sh_pass@&connect_string  -
+HOST sqlldr sales_hist/&sh_pass@&connect_string  -
  control=&ctl_file data=&dat_file log=&log_file -
  direct=yes -
  rows=10
@@ -204,7 +204,7 @@ PROMPT   &ctl_file
 PROMPT   &dat_file
 PROMPT   &log_file
 
-HOST sqlldr sh/&sh_pass@&connect_string  -
+HOST sqlldr sales_hist/&sh_pass@&connect_string  -
  control=&ctl_file data=&dat_file log=&log_file -
  direct=yes -
  rows=10
@@ -225,7 +225,7 @@ PROMPT   &ctl_file
 PROMPT   &dat_file
 PROMPT   &log_file
 
-HOST sqlldr sh/&sh_pass@&connect_string  -
+HOST sqlldr sales_hist/&sh_pass@&connect_string  -
  control=&ctl_file data=&dat_file log=&log_file -
  direct=yes -
  rows=100000
@@ -250,50 +250,50 @@ CREATE TABLE sales_transactions_ext
   UNIT_COST 	NUMBER(10,2),
   UNIT_PRICE 	NUMBER(10,2)
 )
-ORGANIZATION external 
+ORGANIZATION external
 (
   TYPE oracle_loader
   DEFAULT DIRECTORY data_file_dir
-  ACCESS PARAMETERS 
+  ACCESS PARAMETERS
   (
     RECORDS DELIMITED BY NEWLINE CHARACTERSET US7ASCII
     TERRITORY AMERICA
     BADFILE log_file_dir:'ext_1v3.bad'
     LOGFILE log_file_dir:'ext_1v3.log'
-    FIELDS TERMINATED BY "|" OPTIONALLY ENCLOSED BY '^' LDRTRIM 
+    FIELDS TERMINATED BY "|" OPTIONALLY ENCLOSED BY '^' LDRTRIM
     ( PROD_ID         ,
       CUST_ID         ,
-      TIME_ID         DATE(10) "YYYY-MM-DD", 
+      TIME_ID         DATE(10) "YYYY-MM-DD",
       CHANNEL_ID      ,
       PROMO_ID        ,
       QUANTITY_SOLD   ,
       AMOUNT_SOLD     ,
       UNIT_COST       ,
-      UNIT_PRICE      
-    ) 
+      UNIT_PRICE
+    )
  )
  LOCATION
  ('sale1v3.dat')
 )
 REJECT LIMIT 100;
 
-INSERT /*+ append */ INTO costs 
+INSERT /*+ append */ INTO costs
 ( prod_id,
   time_id,
   channel_id,
   promo_id,
   unit_cost,
   unit_price )
-SELECT 
+SELECT
   prod_id,
   time_id,
   channel_id,
   promo_id,
   AVG(unit_cost),
   AVG(amount_sold/quantity_sold)
-FROM 
+FROM
   sales_transactions_ext
-GROUP BY 
+GROUP BY
   prod_id,
   time_id,
   channel_id,
@@ -315,12 +315,12 @@ PROMPT   &dat_file
 PROMPT   &log_file
 
 
-HOST sqlldr sh/&sh_pass@&connect_string  -
+HOST sqlldr sales_hist/&sh_pass@&connect_string  -
  control=&ctl_file data=&dat_file log=&log_file -
  direct=yes -
  rows=100
 
-   
+
 --
 -- SUPPLEMENTARY DEMOGRAPHICS
 --
@@ -335,7 +335,7 @@ PROMPT   &ctl_file
 PROMPT   &dat_file
 PROMPT   &log_file
 
-HOST sqlldr sh/&sh_pass@&connect_string  -
+HOST sqlldr sales_hist/&sh_pass@&connect_string  -
  control=&ctl_file data=&dat_file log=&log_file -
  direct=yes -
  rows=10

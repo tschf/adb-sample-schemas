@@ -71,13 +71,13 @@ Rem
 SET ECHO OFF
 
 PROMPT
-PROMPT specify password for SH as parameter 1:
+PROMPT specify password for SALES_HIST as parameter 1:
 DEFINE pass     = &1
 PROMPT
-PROMPT specify default tablespace for SH as parameter 2:
+PROMPT specify default tablespace for SALES_HIST as parameter 2:
 DEFINE tbs      = &2
 PROMPT
-PROMPT specify temporary tablespace for SH as parameter 3:
+PROMPT specify temporary tablespace for SALES_HIST as parameter 3:
 DEFINE ttbs     = &3
 PROMPT
 PROMPT specify password for SYS as parameter 4:
@@ -105,50 +105,50 @@ ALTER SESSION SET NLS_LANGUAGE='American';
 -- Dropping the user with all its objects
 --
 
-DROP USER sh CASCADE;
+DROP USER sales_hist CASCADE;
 
 REM =======================================================
 REM create user
 REM THIS WILL ONLY WORK IF APPROPRIATE TS ARE PRESENT
 REM =======================================================
 
-CREATE USER sh IDENTIFIED BY &pass;
+CREATE USER sales_hist IDENTIFIED BY &pass;
 
-ALTER USER sh DEFAULT TABLESPACE &tbs
+ALTER USER sales_hist DEFAULT TABLESPACE &tbs
  QUOTA UNLIMITED ON &tbs;
-ALTER USER sh TEMPORARY TABLESPACE &ttbs;
+ALTER USER sales_hist TEMPORARY TABLESPACE &ttbs;
 
-GRANT CREATE DIMENSION         TO sh;
-GRANT QUERY REWRITE            TO sh;
-GRANT CREATE MATERIALIZED VIEW TO sh;
-
-
-GRANT CREATE SESSION           TO sh;
-GRANT CREATE SYNONYM           TO sh;
-GRANT CREATE TABLE             TO sh;
-GRANT CREATE VIEW              TO sh;
-GRANT CREATE SEQUENCE          TO sh;
-GRANT CREATE CLUSTER           TO sh;
-GRANT CREATE DATABASE LINK     TO sh;
-GRANT ALTER SESSION            TO sh;
-GRANT CREATE ANY DIRECTORY to sh;
+GRANT CREATE DIMENSION         TO sales_hist;
+GRANT QUERY REWRITE            TO sales_hist;
+GRANT CREATE MATERIALIZED VIEW TO sales_hist;
 
 
-GRANT RESOURCE , UNLIMITED TABLESPACE              TO sh;
-GRANT select_catalog_role   TO sh;
+GRANT CREATE SESSION           TO sales_hist;
+GRANT CREATE SYNONYM           TO sales_hist;
+GRANT CREATE TABLE             TO sales_hist;
+GRANT CREATE VIEW              TO sales_hist;
+GRANT CREATE SEQUENCE          TO sales_hist;
+GRANT CREATE CLUSTER           TO sales_hist;
+GRANT CREATE DATABASE LINK     TO sales_hist;
+GRANT ALTER SESSION            TO sales_hist;
+GRANT CREATE ANY DIRECTORY to sales_hist;
 
-rem   ALTER USER sh GRANT CONNECT THROUGH olapsvr;
+
+GRANT RESOURCE , UNLIMITED TABLESPACE              TO sales_hist;
+GRANT select_catalog_role   TO sales_hist;
+
+rem   ALTER USER sales_hist GRANT CONNECT THROUGH olapsvr;
 
 REM =======================================================
 REM grants for sys schema
 REM =======================================================
 
 CONNECT admin/&pass_admin@&connect_string;
-GRANT execute ON sys.dbms_stats TO sh;
+GRANT execute ON sys.dbms_stats TO sales_hist;
 
 REM =======================================================
 REM DIRECTORY objects are always owned by SYS
-REM    for security reasons, SH does not have
+REM    for security reasons, sales_hist does not have
 REM    CREATE ANY DIRECTORY system privilege
 REM =======================================================
 
@@ -156,16 +156,16 @@ CREATE OR REPLACE DIRECTORY sales as 'sh';
 CREATE OR REPLACE DIRECTORY data_file_dir AS 'sh/data';
 CREATE OR REPLACE DIRECTORY log_file_dir AS 'sh/logs';
 
-GRANT READ ON DIRECTORY sales TO sh;
-GRANT READ ON DIRECTORY data_file_dir TO sh;
-GRANT READ ON DIRECTORY log_file_dir  TO sh;
-GRANT WRITE ON DIRECTORY log_file_dir TO sh;
+GRANT READ ON DIRECTORY sales TO sales_hist;
+GRANT READ ON DIRECTORY data_file_dir TO sales_hist;
+GRANT READ ON DIRECTORY log_file_dir  TO sales_hist;
+GRANT WRITE ON DIRECTORY log_file_dir TO sales_hist;
 
 REM =======================================================
-REM create sh schema objects (sales history - star schema)
+REM create sales_hist schema objects (sales history - star schema)
 REM =======================================================
 
-CONNECT sh/&pass@&connect_string
+CONNECT sales_hist/&pass@&connect_string
 
 ALTER SESSION SET NLS_LANGUAGE=American;
 ALTER SESSION SET NLS_TERRITORY=America;
@@ -174,7 +174,7 @@ REM =======================================================
 REM Create tables
 REM =======================================================
 
-REM CONNECT sh/&pass  reconnecting undoes the prior NLS settings
+REM CONNECT sales_hist/&pass  reconnecting undoes the prior NLS settings
 
 DEFINE vscript = __SUB__CWD__/sales_history/csh_&vrs
 @&vscript
