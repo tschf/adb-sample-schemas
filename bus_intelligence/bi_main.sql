@@ -157,8 +157,8 @@ SELECT COUNT(*) FROM promotions;
 SELECT COUNT(*) FROM sales;
 SELECT COUNT(*) FROM costs;
 
-SELECT COUNT(*) FROM sh.cal_month_sales_mv;
-SELECT COUNT(*) FROM sh.fweek_pscat_sales_mv;
+SELECT COUNT(*) FROM sales_hist.cal_month_sales_mv;
+SELECT COUNT(*) FROM sales_hist.fweek_pscat_sales_mv;
 
 SELECT COUNT(*) FROM channels;
 SELECT COUNT(*) FROM countries;

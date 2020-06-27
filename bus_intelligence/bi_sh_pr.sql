@@ -1,7 +1,7 @@
 Rem $Header: bi_sh_pr.sql 2015/03/19 10:23:26 smtaylor Exp $
 Rem
-Rem Copyright (c) 2002, 2015 Oracle Corporation.  All rights reserved.  
-Rem 
+Rem Copyright (c) 2002, 2015 Oracle Corporation.  All rights reserved.
+Rem
 Rem Permission is hereby granted, free of charge, to any person obtaining
 Rem a copy of this software and associated documentation files (the
 Rem "Software"), to deal in the Software without restriction, including
@@ -9,10 +9,10 @@ Rem without limitation the rights to use, copy, modify, merge, publish,
 Rem distribute, sublicense, and/or sell copies of the Software, and to
 Rem permit persons to whom the Software is furnished to do so, subject to
 Rem the following conditions:
-Rem 
+Rem
 Rem The above copyright notice and this permission notice shall be
 Rem included in all copies or substantial portions of the Software.
-Rem 
+Rem
 Rem THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 Rem EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 Rem MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -42,14 +42,14 @@ SET TAB OFF
 SET PAGESIZE 100
 
 PROMPT
-PROMPT specify password for SH as parameter 1:
+PROMPT specify password for SALES_HIST as parameter 1:
 DEFINE sh_pass             = &1
 PROMPT
 PROMPT specify connect string as parameter 2:
 DEFINE connect_string     = &2
 PROMPT
 
-CONNECT sh/&sh_pass@&connect_string;
+CONNECT sales_hist/&sh_pass@&connect_string;
 
 GRANT SELECT ON channels		TO bi;
 GRANT SELECT ON countries		TO bi;
@@ -61,6 +61,6 @@ GRANT SELECT ON promotions		TO bi;
 GRANT SELECT ON sales			TO bi;
 GRANT SELECT ON times			TO bi;
 GRANT SELECT ON cal_month_sales_mv	TO bi;
-GRANT SELECT ON sh.fweek_pscat_sales_mv	TO bi;
+GRANT SELECT ON sales_hist.fweek_pscat_sales_mv	TO bi;
 
 COMMIT;

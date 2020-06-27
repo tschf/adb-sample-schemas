@@ -113,26 +113,24 @@ DEFINE password_pm         = &4
 PROMPT
 PROMPT specify password for IX as parameter 5:
 DEFINE password_ix         = &5
--- trent: We're not using SH in this initial version, so remove as an input parm.
--- PROMPT
--- PROMPT specify password for  SH as parameter 6:
--- DEFINE password_sh         = &6
--- trent: BI is just some views on top of SH, skip for now.
--- PROMPT
--- PROMPT specify password for  BI as parameter 7:
--- DEFINE password_bi         = &6
 PROMPT
-PROMPT specify default tablespace as parameter 6:
-DEFINE default_ts          = &6
+PROMPT specify password for  SH as parameter 6:
+DEFINE password_sh         = &6
 PROMPT
-PROMPT specify temporary tablespace as parameter 7:
-DEFINE temp_ts             = &7
+PROMPT specify password for  BI as parameter 7:
+DEFINE password_bi         = &7
 PROMPT
-PROMPT specify log file directory (including trailing delimiter) as parameter 8:
-DEFINE logfile_dir         = &8
+PROMPT specify default tablespace as parameter 8:
+DEFINE default_ts          = &8
 PROMPT
-PROMPT specify connect string as parameter 9:
-DEFINE connect_string     = &9
+PROMPT specify temporary tablespace as parameter 9:
+DEFINE temp_ts             = &9
+PROMPT
+PROMPT specify log file directory (including trailing delimiter) as parameter 10:
+DEFINE logfile_dir         = &10
+PROMPT
+PROMPT specify connect string as parameter 11:
+DEFINE connect_string     = &11
 PROMPT
 PROMPT Sample Schemas are being created ...
 PROMPT
@@ -160,19 +158,15 @@ SET SHOWMODE OFF
 
 @__SUB__CWD__/info_exchange/ix_main.sql &&password_ix &&default_ts &&temp_ts &&password_admin &&logfile_dir &vrs &&connect_string
 
--- trent: In ATP, SH schema already exists in a read only form. So we can not continue
--- with this. TODO - Update scripts to reference a new schema name.
--- CONNECT admin/"&&password_admin"@&&connect_string
--- SET SHOWMODE OFF
+CONNECT admin/"&&password_admin"@&&connect_string
+SET SHOWMODE OFF
 
--- @__SUB__CWD__/sales_history/sh_main &&password_sh &&default_ts &&temp_ts &&password_admin __SUB__CWD__/sales_history/ &&logfile_dir &vrs &&connect_string
+@__SUB__CWD__/sales_history/sh_main &&password_sh &&default_ts &&temp_ts &&password_admin __SUB__CWD__/sales_history/ &&logfile_dir &vrs &&connect_string
 
--- trent: The BI schema is basically some views on top of SH and OE, so we can skip for
--- the moment
--- CONNECT admin/"&&password_admin"@&&connect_string
--- SET SHOWMODE OFF
+CONNECT admin/"&&password_admin"@&&connect_string
+SET SHOWMODE OFF
 
--- @__SUB__CWD__/bus_intelligence/bi_main &&password_bi &&default_ts &&temp_ts &&password_admin &&password_oe &&password_sh &&logfile_dir &vrs &&connect_string
+@__SUB__CWD__/bus_intelligence/bi_main &&password_bi &&default_ts &&temp_ts &&password_admin &&password_oe &&password_sh &&logfile_dir &vrs &&connect_string
 
 CONNECT admin/"&&password_admin"@&&connect_string
 
